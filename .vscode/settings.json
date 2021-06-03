@@ -1,3 +1,4 @@
 {
-    "editor.fontFamily": "Lilex"
+    "editor.fontFamily": "Lilex",
+    "terminal.integrated.fontFamily": "Hack"
 }
