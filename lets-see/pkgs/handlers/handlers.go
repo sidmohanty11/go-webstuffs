@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"github.com/sidmohanty11/go-webstuffs/pkgs/config"
+	"github.com/sidmohanty11/go-webstuffs/pkgs/models"
 	"github.com/sidmohanty11/go-webstuffs/pkgs/render"
 	"net/http"
 )
@@ -28,10 +29,15 @@ func NewHandlers(r *Repository) {
 
 //Home is the home page Handler
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "home.page.html")
+	render.RenderTemplate(w, "home.page.html", &models.TemplateData{})
 }
 
 //About is the about page handler
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "about.page.html")
+	stringMap := make(map[string]string)
+	stringMap["test"] = "Passing string values from go."
+
+	render.RenderTemplate(w, "about.page.html", &models.TemplateData{
+		StringMap: stringMap,
+	})
 }
