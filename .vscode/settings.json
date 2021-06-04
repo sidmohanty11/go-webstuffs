@@ -1,4 +1,6 @@
 {
     "editor.fontFamily": "Lilex",
-    "terminal.integrated.fontFamily": "Hack"
+    "terminal.integrated.fontFamily": "Hack",
+    "go.autocompleteUnimportedPackages": true,
+    "go.useCodeSnippetsOnFunctionSuggest": true
 }
