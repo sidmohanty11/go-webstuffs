@@ -2,6 +2,7 @@ package render
 
 import (
 	"bytes"
+	"github.com/sidmohanty11/go-webstuffs/pkgs/config"
 	"html/template"
 	"log"
 	"net/http"
@@ -10,25 +11,32 @@ import (
 
 var functions = template.FuncMap{}
 
+var app *config.AppConfig
+
+//NewTemplates -> sets the config for the template pkg
+func NewTemplates(a *config.AppConfig) {
+	app = a
+}
+
 //RenderTemplate func -> executes the templates
 func RenderTemplate(w http.ResponseWriter, tmpl string) {
-	tc, err := CreateTemplateCache() //tc:templateCache from CreateTemplateCache func
-
-	if err != nil {
-		log.Fatalln("Error:", err.Error())
+	var tc map[string]*template.Template
+	if app.UseCache { // in production -> cache it!
+		tc = app.TemplateCache
+	} else { //in development mode - read from disk
+		tc, _ = CreateTemplateCache()
 	}
-
 	t, ok := tc[tmpl]
 
 	if !ok {
-		log.Fatalln(err.Error())
+		log.Fatalln("Couldn't get template from template cache")
 	}
 
 	buf := new(bytes.Buffer)
 
 	_ = t.Execute(buf, nil)
 
-	_, err = buf.WriteTo(w)
+	_, err := buf.WriteTo(w)
 
 	if err != nil {
 		log.Fatalln("Error:", err.Error())
