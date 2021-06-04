@@ -2,19 +2,34 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+	"time"
+
+	"github.com/alexedwards/scs/v2"
 	"github.com/sidmohanty11/go-webstuffs/pkgs/config"
 	"github.com/sidmohanty11/go-webstuffs/pkgs/handlers"
 	"github.com/sidmohanty11/go-webstuffs/pkgs/render"
-	"log"
-	"net/http"
 )
 
 //The port you want to serve to
 const PORT = ":8000"
 
+var app config.AppConfig
+var session *scs.SessionManager
+
 func main() {
 	//url -> uniform resource locator!
-	var app config.AppConfig
+	//true when in prod
+	app.InProduction = false
+
+	session = scs.New()
+	session.Lifetime = 24 * time.Hour
+	session.Cookie.Persist = true
+	session.Cookie.SameSite = http.SameSiteLaxMode
+	session.Cookie.Secure = app.InProduction
+	app.Session = session
+
 	tc, err := render.CreateTemplateCache()
 
 	if err != nil {
