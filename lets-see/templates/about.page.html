@@ -7,6 +7,12 @@
         <div class="col">
             <h1>This is the About Page.</h1>
             <p>The secret message that came is: {{index .StringMap "test"}}</p>
+            <p>{{if ne (index .StringMap "remote_ip") ""}}
+                    Your remote IP address is {{index .StringMap "remote_ip"}}
+                {{else}}
+                    I don't know your ip address, go to <a href="/">home</a> to set it
+                {{end}}
+            </p>
         </div>
     </div>
 </div>

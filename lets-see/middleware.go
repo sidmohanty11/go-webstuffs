@@ -1,19 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"github.com/justinas/nosurf"
 	"net/http"
 )
 
-func WriteToConsole(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Page is hit")
-		next.ServeHTTP(w, r)
-	})
-}
-
-func NoSrv(next http.Handler) http.Handler {
+//adds CSRF -> cross site request forgery protection to all POST reqs
+func NoSurf(next http.Handler) http.Handler {
 	csrfHandler := nosurf.New(next)
 
 	csrfHandler.SetBaseCookie(http.Cookie{
@@ -24,4 +17,9 @@ func NoSrv(next http.Handler) http.Handler {
 	})
 
 	return csrfHandler
+}
+
+//loads and saves the session on every req
+func SessionLoad(next http.Handler) http.Handler {
+	return session.LoadAndSave(next)
 }
