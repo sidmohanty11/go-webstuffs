@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
         crossorigin="anonymous"></script>
-        <!-- datepicker package -->
+    <!-- datepicker package -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/css/datepicker.min.css">
     <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/js/datepicker-full.min.js"></script>
     <link rel="stylesheet"
@@ -27,6 +27,9 @@
             margin-top: 2em;
             padding: 1em;
             color: whitesmoke;
+        }
+        .datepicker {
+            z-index:10,
         }
     </style>
 </head>
@@ -114,23 +117,107 @@
         });
     </script>
     <!-- notie package -->
-    <script src="https://unpkg.com/notie"></script> 
+    <script src="https://unpkg.com/notie"></script>
     <!-- sweetalert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        const checkAvailabilityHTML = `
+        <form action="" method="GET">
+                <div class="row">
+                    <div class="row mb-3" id="reservation-date-modal">
+                        <div class="col-6">
+                            <label for="start_date" class="form-label">Starting Date</label>
+                            <input disabled placeholder="yyyy-mm-dd" type="text" class="form-control" id="start_date"
+                                name="start" aria-describedby="startEmailHelp" required>
+                            <div id="emailHelp" class="form-text">Enter your starting date for stay.</div>
+                        </div>
+                        <div class="col-6">
+                            <label for="end_date" class="form-label">Ending Date</label>
+                            <input disabled placeholder="yyyy-mm-dd" type="text" class="form-control" id="end_date" name="end"
+                                aria-describedby="endEmailHelp" required>
+                            <div id="emailHelp" class="form-text">Enter your ending date of stay.</div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <button type="submit" class="btn btn-dark">Search Availability</button>
+            </form>
+        `;
         function notify(msg, type) {
             notie.alert({
                 type: type,
                 text: msg,
             })
         }
-        function notifyModal(title,text,icon, confirmButtonText) {
-            Swal.fire({
-                title: title,
-                text: text,
-                icon: icon,
-                confirmButtonText: confirmButtonText,
-            })
+        function Prompt() {
+            const toast = ({ msg = "", icon = "success", position = "top-end" }) => {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    title: msg,
+                    position: position,
+                    icon: icon,
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+                Toast.fire({})
+            }
+            const success = ({ title = "", text = "", icon, footer = "" }) => {
+                Swal.fire({
+                    title: title,
+                    text: text,
+                    icon: 'success',
+                    footer: footer,
+                })
+            }
+            const error = ({ title = "", text = "", icon, footer = "" }) => {
+                Swal.fire({
+                    title: title,
+                    text: text,
+                    icon: 'error',
+                    footer: footer,
+                })
+            }
+            const custom = async ({ title = "", text = "" }) => {
+                const { value: formValues } = await Swal.fire({
+                    title: title,
+                    html: text,
+                    backdrop:false,
+                    focusConfirm: false,
+                    showCancelButton:true,
+                    willOpen: () => {
+                        const elem = document.getElementById("reservation-date-modal");
+                        const rp = new DateRangePicker(elem, {
+                            format: 'yyyy-mm-dd',
+                            showOnFocus:true,
+                        })
+                    },
+                    preConfirm: () => {
+                        return [
+                            document.getElementById('start').value,
+                            document.getElementById('end').value
+                        ]
+                    },
+                    didOpen: () => {
+                        document.getElementById('start').removeAttribute('disabled');
+                        document.getElementById('end').removeAttribute('disabled');
+                    }
+                })
+
+                if (formValues) {
+                    Swal.fire(JSON.stringify(formValues))
+                }
+            }
+            return {
+                toast:toast,
+                success:success,
+                error:error,
+                custom:custom
+            }
         }
     </script>
 </body>
