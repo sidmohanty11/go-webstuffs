@@ -5,7 +5,8 @@
 <div class="container">
     <div class="row">
         <h2 class="mt-4">Search for Availability</h2>
-        <form action="" method="GET">
+        <form action="/search-availability" method="POST">
+            <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
             <div class="row">
                 <div class="row mb-3" id="reservation-date">
                     <div class="col-6">
