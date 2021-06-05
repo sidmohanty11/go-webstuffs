@@ -2,12 +2,13 @@ package render
 
 import (
 	"bytes"
-	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/config"
-	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/models"
 	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
+
+	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/config"
+	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/models"
 )
 
 var functions = template.FuncMap{}

@@ -35,10 +35,8 @@ func main() {
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
-
+	app.UseCache = app.InProduction
 	app.TemplateCache = tc
-
-	app.UseCache = false
 
 	repo := handlers.NewRepo(&app)
 	handlers.NewHandlers(repo)
