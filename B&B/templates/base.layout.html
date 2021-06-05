@@ -83,32 +83,7 @@
     <script src="https://unpkg.com/notie"></script>
     <!-- sweetalert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    {{block "js" .}}
-    
-    {{end}}
     <script>
-        const checkAvailabilityHTML = `
-            <form action="" method="GET">
-                    <div class="row">
-                        <div class="row mb-3" id="reservation-date-modal">
-                            <div class="col-6">
-                                <label for="start_date" class="form-label">Starting Date</label>
-                                <input disabled placeholder="yyyy-mm-dd" type="text" class="form-control" id="start_date"
-                                    name="start" aria-describedby="startEmailHelp" required>
-                                <div id="emailHelp" class="form-text">Enter your starting date for stay.</div>
-                            </div>
-                            <div class="col-6">
-                                <label for="end_date" class="form-label">Ending Date</label>
-                                <input disabled placeholder="yyyy-mm-dd" type="text" class="form-control" id="end_date" name="end"
-                                    aria-describedby="endEmailHelp" required>
-                                <div id="emailHelp" class="form-text">Enter your ending date of stay.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr />
-                    <button type="submit" class="btn btn-dark">Search Availability</button>
-                </form>
-            `;
         function notify(msg, type) {
             notie.alert({
                 type: type,
@@ -169,8 +144,8 @@
                         ]
                     },
                     didOpen: () => {
-                        document.getElementById('start').removeAttribute('disabled');
-                        document.getElementById('end').removeAttribute('disabled');
+                        document.getElementById('start_date').removeAttribute('disabled');
+                        document.getElementById('end_date').removeAttribute('disabled');
                     }
                 })
 
@@ -185,7 +160,11 @@
                 custom: custom
             }
         }
+        let attention = Prompt();
     </script>
+    {{block "js" .}}
+    
+    {{end}}
     </body>
     
     </html>

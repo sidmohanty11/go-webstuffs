@@ -11,16 +11,47 @@
     <div class="row">
         <div class="col">
             <h1 class="text-center mt-4">The General's Suite</h1>
-            <p>Your way away from home, soothing wind and music of life which will rejuvinate you with all possible
-                ways.
-                The view and our food will always force you to take a vacation here every year!
+            <p>A suite offers a separate sitting and/or working area; unlike the junior edition, though, true suites separate these
+            areas from the sleeping quarters with a permanent wall and, in many cases, a door. A suite may or may not feature a
+            kitchenette or a full kitchen. Also of note, Sleeping Around cautions that some hotels market junior suites as full
+            suite accommodations. To avoid confusion, travelers should verify the features before booking a suite.
             </p>
         </div>
     </div>
     <div class="row">
         <div class="col text-center">
-            <a href="/reservation/gs" class="btn btn-outline-dark">Check Availability</a>
+            <a id="checkAvailabilitybutton" href="#!" class="btn btn-outline-dark">Check Availability</a>
         </div>
     </div>
 </div>
+{{end}}
+
+{{define "js"}}
+<script>
+    document.getElementById("checkAvailabilitybutton").addEventListener("click", function () {
+        const html = `
+<form action="" method="POST" novalidate>
+    <div class="row">
+        <div class="row mb-3" id="reservation-date-modal">
+            <div class="col-6">
+                <label for="start_date" class="form-label">Starting Date</label>
+                <input disabled placeholder="yyyy-mm-dd" type="text" class="form-control" id="start_date" name="start"
+                    aria-describedby="startEmailHelp" required>
+                <div id="emailHelp" class="form-text">Enter your starting date for stay.</div>
+            </div>
+            <div class="col-6">
+                <label for="end_date" class="form-label">Ending Date</label>
+                <input disabled placeholder="yyyy-mm-dd" type="text" class="form-control" id="end_date" name="end"
+                    aria-describedby="endEmailHelp" required>
+                <div id="emailHelp" class="form-text">Enter your ending date of stay.</div>
+            </div>
+        </div>
+    </div>
+    <hr />
+</form>
+`;
+
+        attention.custom({ text: html, title: "Choose your dates." })
+    })
+</script>
 {{end}}
