@@ -6,7 +6,8 @@ This repository contains all my works on web apps with golang.
 
 - The _hello-world-web_ is a starting pack for running a live server with a string hello world.
 - _fiber-again_ contains starter template for getting started with [fiber-framework](https://github.com/gofiber/fiber)
-- _lets-see_ is a starter template with middlewares, routes, templates and pkgs folder structure (**Barebone-Golang WebApp Structure**) 
+- _lets-see_ is a starter template with middlewares(nosurf, session), templates, caching templates, routes setup and pkgs folder structure (**Barebone-Golang WebApp Structure**)[Download](https://github.com/sidmohanty11/go-webstuffs/files/6602953/lets-see.zip)
+
 
 ### For lets-see and B&B
 ```bash
