@@ -1,0 +1,31 @@
+{{template "base" .}}
+
+
+{{define "content"}}
+<div class="container">
+    <div class="row">
+        <h2 class="mt-4">Search for Availability</h2>
+        <form action="" method="GET">
+            <div class="row">
+                <div class="row mb-3" id="reservation-date">
+                    <div class="col-6">
+                        <label for="start_date" class="form-label">Starting Date</label>
+                        <input placeholder="yyyy-mm-dd" type="text" class="form-control" id="start_date" name="start"
+                            aria-describedby="startEmailHelp" required>
+                        <div id="emailHelp" class="form-text">Enter your starting date for stay.</div>
+                    </div>
+                    <div class="col-6">
+                        <label for="end_date" class="form-label">Ending Date</label>
+                        <input placeholder="yyyy-mm-dd" type="text" class="form-control" id="end_date" name="end"
+                            aria-describedby="endEmailHelp" required>
+                        <div id="emailHelp" class="form-text">Enter your ending date of stay.</div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <button type="submit" class="btn btn-dark">Search Availability</button>
+        </form>
+    </div>
+</div>
+
+{{end}}
