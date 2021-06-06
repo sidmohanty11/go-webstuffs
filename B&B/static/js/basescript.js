@@ -4,6 +4,7 @@ function notify(msg, type) {
         text: msg,
     })
 }
+
 function Prompt() {
     const toast = ({ msg = "", icon = "success", position = "top-end" }) => {
         const Toast = Swal.mixin({
