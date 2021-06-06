@@ -3,12 +3,12 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"log"
-	"net/http"
-
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/config"
+	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/forms"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/models"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/render"
+	"log"
+	"net/http"
 )
 
 //is the respository type
@@ -54,6 +54,13 @@ func (m *Repository) Presidentals(w http.ResponseWriter, r *http.Request) {
 //Reservation is the Reservation page handler
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{})
+}
+
+//PostReservation is the PostReservation page handler
+func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{
+		Form: forms.New(nil),
+	})
 }
 
 //Availability is the Search-Availability page handler
