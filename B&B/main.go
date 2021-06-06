@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,6 +10,7 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/config"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/handlers"
+	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/models"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/render"
 )
 
@@ -19,6 +21,9 @@ var app config.AppConfig
 var session *scs.SessionManager
 
 func main() {
+	//put stuff in session =>
+	gob.Register(models.Reservation{})
+
 	//url -> uniform resource locator!
 	//true when in prod
 	app.InProduction = false
