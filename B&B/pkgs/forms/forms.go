@@ -1,7 +1,12 @@
 package forms
 
 import (
+	"fmt"
+	"net/http"
 	"net/url"
+	"strings"
+
+	"github.com/asaskevich/govalidator"
 )
 
 //creates a custom form struct, embeds a url.Values obj
@@ -16,4 +21,42 @@ func New(data url.Values) *Form {
 		data,
 		errors(map[string][]string{}),
 	}
+}
+
+func (f *Form) Required(fields ...string) {
+	for _, field := range fields {
+		value := f.Get(field)
+		if strings.TrimSpace(value) == "" {
+			f.Errors.Add(field, "This Field cannot be blank!!!")
+		}
+	}
+}
+
+//checks minimum length of string => first_name, last_name
+func (f *Form) MinLength(field string, length int, r *http.Request) bool {
+	x := r.Form.Get(field)
+	if len(x) < length {
+		f.Errors.Add(field, fmt.Sprintf("This field must be atleast %d characters long", length))
+		return false
+	}
+	return true
+}
+
+//check email
+func (f *Form) EmailCheck(field string) bool {
+	if !govalidator.IsEmail(f.Get(field)) {
+		f.Errors.Add(field, "Invalid email Address")
+		return false
+	}
+	return true
+}
+
+//check phone number
+func (f *Form) PhoneCheck(field string, r *http.Request) bool {
+	x := r.Form.Get(field)
+	if len(x) != 10 {
+		f.Errors.Add(field, fmt.Sprintln("Phone number must be of 10-digits"))
+		return false
+	}
+	return true
 }
