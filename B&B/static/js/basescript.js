@@ -1,3 +1,4 @@
+//func to use notie for pop notifications
 function notify(msg, type) {
     notie.alert({
         type: type,
@@ -5,6 +6,7 @@ function notify(msg, type) {
     })
 }
 
+//boilerplate funcs to use SweetAlert for popups
 function Prompt() {
     const toast = ({ msg = "", icon = "success", position = "top-end" }) => {
         const Toast = Swal.mixin({

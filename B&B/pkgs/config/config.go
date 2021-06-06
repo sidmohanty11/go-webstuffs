@@ -5,7 +5,7 @@ import (
 	"html/template"
 )
 
-//AppConfig -> holds the application configuration.
+//AppConfig -> holds the application configuration. It's like React ContextApi, stores value over all packages!
 type AppConfig struct {
 	UseCache      bool
 	TemplateCache map[string]*template.Template

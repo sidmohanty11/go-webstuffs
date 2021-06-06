@@ -1,3 +1,5 @@
+//executes when the button is clicked! in Generals
+
 document.getElementById("checkAvailabilitybutton").addEventListener("click", function () {
     const html = `
 <form action="" method="POST" novalidate id="check-availability-form">

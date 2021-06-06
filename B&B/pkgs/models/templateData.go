@@ -4,7 +4,7 @@ import (
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/forms"
 )
 
-//holds data sent from handlers -> templates
+//Holds data sent from handlers -> templates
 type TemplateData struct {
 	StringMap map[string]string
 	IntMap    map[string]int

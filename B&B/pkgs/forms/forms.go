@@ -23,6 +23,7 @@ func New(data url.Values) *Form {
 	}
 }
 
+//Checks if the string is not empty
 func (f *Form) Required(fields ...string) {
 	for _, field := range fields {
 		value := f.Get(field)

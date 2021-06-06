@@ -11,7 +11,7 @@ func (e errors) Add(field, message string) {
 
 //returns the first error message
 func (e errors) Get(field string) string {
-	es := e[field]
+	es := e[field] //error string
 
 	if len(es) == 0 {
 		return ""
@@ -32,7 +32,7 @@ func (f *Form) Has(field string, r *http.Request) bool {
 	return true
 }
 
-//check validity of the form, T => if no errors, F => has errors
+//check validity of the form, True => if no errors, False => has errors
 func (f *Form) Valid() bool {
 	return len(f.Errors) == 0
 }
