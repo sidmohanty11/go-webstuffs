@@ -1,11 +1,14 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
+	"net/http"
+
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/config"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/models"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/render"
-	"net/http"
 )
 
 //is the respository type
@@ -63,6 +66,28 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 	start := r.Form.Get("start")
 	end := r.Form.Get("end")
 	w.Write([]byte(fmt.Sprintf("start date is %s and end date is %s", start, end)))
+}
+
+type jsonResponse struct {
+	OK      bool   `json:"ok"`
+	Message string `json:"message"`
+}
+
+//AvailabilityJSON is getting response as json
+func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
+	resp := jsonResponse{
+		OK:      true,
+		Message: "Available",
+	}
+
+	out, err := json.MarshalIndent(resp, "", "    ")
+
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(out)
 }
 
 //Contact is the Contact page handler

@@ -30,7 +30,7 @@
 <script>
     document.getElementById("checkAvailabilitybutton").addEventListener("click", function () {
         const html = `
-<form action="" method="POST" novalidate>
+<form action="" method="POST" novalidate id="check-availability-form">
     <div class="row">
         <div class="row mb-3" id="reservation-date-modal">
             <div class="col-6">
@@ -51,7 +51,22 @@
 </form>
 `;
 
-        attention.custom({ text: html, title: "Choose your dates." })
+        attention.custom({
+            text: html,
+            title: "Choose your dates.",
+            callback: function(result) {
+                const form = document.getElementById("check-availability-form");
+                const formData = new FormData(form);
+                formData.append("csrf_token", "{{.CSRFToken}}");
+
+                fetch("/search-availability-json", {
+                    method:"POST",
+                    body:formData,
+                })
+                .then(res => res.json())
+                .then(data => console.log(data))
+            }
+            });
     })
 </script>
 {{end}}
