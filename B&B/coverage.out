@@ -1,0 +1,9 @@
+mode: set
+github.com/sidmohanty11/go-webstuffs/BB/main.go:23.13,36.16 5 0
+github.com/sidmohanty11/go-webstuffs/BB/main.go:36.16,38.3 1 0
+github.com/sidmohanty11/go-webstuffs/BB/main.go:41.18,58.16 10 1
+github.com/sidmohanty11/go-webstuffs/BB/main.go:62.2,69.12 6 1
+github.com/sidmohanty11/go-webstuffs/BB/main.go:58.16,61.3 2 0
+github.com/sidmohanty11/go-webstuffs/BB/middleware.go:9.45,20.2 3 1
+github.com/sidmohanty11/go-webstuffs/BB/middleware.go:23.50,25.2 1 1
+github.com/sidmohanty11/go-webstuffs/BB/routes.go:11.49,39.2 18 1

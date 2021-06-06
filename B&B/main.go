@@ -21,6 +21,24 @@ var app config.AppConfig
 var session *scs.SessionManager
 
 func main() {
+	//put it back when testing is done ----
+
+	//--------
+	fmt.Printf("Listening at PORT%s", PORT)
+	fmt.Println()
+
+	srv := &http.Server{
+		Addr:    PORT,
+		Handler: routes(&app),
+	}
+
+	err := srv.ListenAndServe()
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+}
+
+func run() error {
 	//put stuff in session =>
 	gob.Register(models.Reservation{})
 
@@ -38,8 +56,10 @@ func main() {
 	tc, err := render.CreateTemplateCache()
 
 	if err != nil {
-		log.Fatalln(err.Error())
+		log.Println(err.Error())
+		return err
 	}
+
 	app.UseCache = app.InProduction
 	app.TemplateCache = tc
 
@@ -47,16 +67,5 @@ func main() {
 	handlers.NewHandlers(repo)
 	render.NewTemplates(&app)
 
-	fmt.Printf("Listening at PORT%s", PORT)
-	fmt.Println()
-
-	srv := &http.Server{
-		Addr:    PORT,
-		Handler: routes(&app),
-	}
-
-	err = srv.ListenAndServe()
-	if err != nil {
-		log.Fatalln(err.Error())
-	}
+	return nil
 }
