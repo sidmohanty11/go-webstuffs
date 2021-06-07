@@ -3,11 +3,11 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/config"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/forms"
+	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/helpers"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/models"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/render"
 )
@@ -37,7 +37,7 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "home.page.html", &models.TemplateData{})
 }
 
-//About is the about page handler  GET"/about"
+//About is the about page handler  GET "/about"
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "about.page.html", &models.TemplateData{})
 }
@@ -71,7 +71,8 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 
 	if err != nil {
-		log.Fatalln(err.Error())
+		helpers.ServerError(w, err)
+		return
 	}
 
 	reservation := models.Reservation{
@@ -133,7 +134,7 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 	out, err := json.MarshalIndent(resp, "", "    ")
 
 	if err != nil {
-		log.Fatalln(err.Error())
+		helpers.ServerError(w, err)
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -149,9 +150,10 @@ func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
-		log.Println("cannot get item from session")
+		m.App.ErrorLog.Println("Can't GET! Error from Session")
 		m.App.Session.Put(r.Context(), "error", "Can't get reservation summary, Maybe you should fill it first?")
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
 	}
 
 	m.App.Session.Remove(r.Context(), "reservation")

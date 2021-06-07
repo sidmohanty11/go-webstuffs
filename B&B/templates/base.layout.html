@@ -25,7 +25,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/"><img src="/static/images/logo.png" width="100px" height="40px" alt="logo" /></a>
+                <a class="navbar-brand" href="/"><img src="/static/images/logo.png" width="143px" height="43px" alt="logo" /></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -83,16 +83,10 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/static/js/basescript.js"></script>
     <!-- not working! -->
-    <script>
-        {{with .Error}}
-         notify("{{.}}", "error")
-        {{end}}
-        {{with .Flash}}
-         notify("{{.}}", "flash") 
-        {{end}}
-        {{with .Warning}} 
-        notify("{{.}}", "warning")
-        {{end}}
+    
+    {{with .Error}}
+    <script> notify("{{.}}", "error")</script>
+    {{end}}
     </script>
     {{block "js" .}}
     
