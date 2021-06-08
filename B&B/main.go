@@ -10,6 +10,7 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/config"
+	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/driver"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/handlers"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/helpers"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/models"
@@ -46,6 +47,17 @@ func main() {
 	session.Cookie.Secure = app.InProduction
 	app.Session = session
 
+	//connect to DB!
+	log.Println("Connecting to DB at PORT 5432")
+	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=postgres user=postgres password=Sidharth11")
+
+	if err != nil {
+		log.Fatalln("Cannot connect to DB!")
+	}
+
+	log.Println("Connected to DB at PORT 5432")
+	defer db.SQL.Close()
+
 	tc, err := render.CreateTemplateCache()
 
 	if err != nil {
@@ -56,7 +68,7 @@ func main() {
 	app.UseCache = app.InProduction
 	app.TemplateCache = tc
 
-	repo := handlers.NewRepo(&app)
+	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
 	render.NewTemplates(&app)
 	helpers.NewHelpers(&app)

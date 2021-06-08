@@ -6,24 +6,29 @@ import (
 	"net/http"
 
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/config"
+	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/driver"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/forms"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/helpers"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/models"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/render"
+	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/repository"
+	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/repository/dbrepo"
 )
 
 //is the respository type
 type Repository struct {
 	App *config.AppConfig
+	DB  repository.DatabaseRepo
 }
 
 //the repository used by the handlers
 var Repo *Repository
 
 //creates a new repository
-func NewRepo(a *config.AppConfig) *Repository {
+func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
 		App: a,
+		DB:  dbrepo.NewPostgresRepo(db.SQL, a),
 	}
 }
 
