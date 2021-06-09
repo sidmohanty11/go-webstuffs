@@ -1,0 +1,33 @@
+{{template "base" .}}
+
+
+{{define "content"}}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1>Choose a Room #According to your budget, We will discuss those over call.</h1>
+
+            {{$rooms := index .Data "rooms"}}
+
+            {{range $rooms}}
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="/static/images/{{.RoomName}}.jpg" class="img-fluid" alt="{{.RoomName}}">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body roomsSelect">
+                            <strong><h5 class="card-title">{{.RoomName}}</h5></strong>
+                            <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsam beatae nihil expedita perspiciatis, veniam laudantium repellat itaque eligendi dignissimos similique et earum, harum in dicta quidem minima, quisquam at unde.
+                            Beatae, pariatur. Minima dolores magni repudiandae aliquam, officiis reprehenderit error eligendi natus nesciunt quod voluptate possimus? Atque tempore repellat, ipsum saepe adipisci deserunt. Debitis blanditiis excepturi esse provident eius nisi.</p>
+                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {{end}}
+        </div>
+    </div>
+</div>
+{{end}}
