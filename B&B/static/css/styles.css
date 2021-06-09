@@ -14,9 +14,3 @@ body {
 .datepicker {
     z-index: 10000;
 }
-
-.roomsSelect:hover {
-    background-color: #242424 !important;
-    color: whitesmoke !important;
-    transform: scale(1.02) !important;
-}
