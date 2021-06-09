@@ -29,6 +29,9 @@ func main() {
 	//-------put it back when testing is done ------
 	//put stuff in session =>
 	gob.Register(models.Reservation{})
+	gob.Register(models.User{})
+	gob.Register(models.Room{})
+	gob.Register(models.Restriction{})
 
 	//url -> uniform resource locator!
 	//true when in prod
@@ -56,7 +59,7 @@ func main() {
 	}
 
 	log.Println("Connected to DB at PORT 5432")
-	defer db.SQL.Close()
+	defer db.SQL.Close() //if testing -> run func returns db too because after run() the db will close if this is there
 
 	tc, err := render.CreateTemplateCache()
 
@@ -70,7 +73,7 @@ func main() {
 
 	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
-	render.NewTemplates(&app)
+	render.NewRenderer(&app)
 	helpers.NewHelpers(&app)
 	//---------------------------------------------
 	fmt.Printf("Listening at PORT%s", PORT)

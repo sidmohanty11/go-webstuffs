@@ -22,6 +22,22 @@
                 {{end}}
                 <input type="text" value="{{$res.LastName}}" name="last_name" class="form-control {{with .Form.Errors.Get "last_name"}} is-invalid {{end}}" id="last_name" required autocomplete="off">
             </div>
+            <!-- testing db -->
+            <div class="form-group mt-2">
+                <label for="start_date">Start Date:</label>
+                <input type="text" name="start_date"
+                    class="form-control" id="start_date" required
+                    autocomplete="off">
+            </div>
+
+            <div class="form-group mt-2">
+                <label for="end_date">End Date:</label>
+                <input type="text" name="end_date" class="form-control" id="end_date" required autocomplete="off">
+            </div>
+
+            <input type="hidden" name="room_id" value="1" />
+
+            <!-- end -->
             <div class="form-group mt-2">
                 <label for="email">Email:</label>
                 {{with .Form.Errors.Get "email"}}

@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
+	"time"
 
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/config"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/driver"
@@ -39,22 +41,22 @@ func NewHandlers(r *Repository) {
 
 //Home is the home page Handler GET "/"
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "home.page.html", &models.TemplateData{})
+	render.Template(w, r, "home.page.html", &models.TemplateData{})
 }
 
 //About is the about page handler  GET "/about"
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "about.page.html", &models.TemplateData{})
+	render.Template(w, r, "about.page.html", &models.TemplateData{})
 }
 
 //Generals is the Generals page handler GET "/rooms/generals"
 func (m *Repository) Generals(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "generals.page.html", &models.TemplateData{})
+	render.Template(w, r, "generals.page.html", &models.TemplateData{})
 }
 
 //Presidentals is the Presidentals page handler GET "/rooms/presidentals"
 func (m *Repository) Presidentals(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "presidentals.page.html", &models.TemplateData{})
+	render.Template(w, r, "presidentals.page.html", &models.TemplateData{})
 }
 
 //Reservation is the Reservation page handler GET "/make-reservation"
@@ -64,7 +66,7 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 
 	data["reservation"] = emptyReservation
 
-	render.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{
+	render.Template(w, r, "make-reservation.page.html", &models.TemplateData{
 		Form: forms.New(nil),
 		Data: data,
 	})
@@ -80,11 +82,38 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	sd := r.Form.Get("start_date")
+	ld := r.Form.Get("end_date")
+
+	// 2020-01-01 => reference => https://www.pauladamsmith.com/blog/2011/05/go_time.html
+
+	dLayout := "2006-01-02"
+	startDate, err := time.Parse(dLayout, sd)
+
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
+	endDate, err := time.Parse(dLayout, ld)
+
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
+	roomID, err := strconv.Atoi(r.Form.Get("room_id"))
+
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
 	reservation := models.Reservation{
 		FirstName: r.Form.Get("first_name"),
 		LastName:  r.Form.Get("last_name"),
 		Email:     r.Form.Get("email"),
 		Phone:     r.Form.Get("phone"),
+		StartDate: startDate,
+		EndDate:   endDate,
+		RoomID:    roomID,
 	}
 
 	form := forms.New(r.PostForm)
@@ -99,11 +128,17 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		data := make(map[string]interface{})
 		data["reservation"] = reservation
 
-		render.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{
+		render.Template(w, r, "make-reservation.page.html", &models.TemplateData{
 			Form: form,
 			Data: data,
 		})
 		return
+	}
+
+	err = m.DB.InsertReservation(reservation)
+
+	if err != nil {
+		helpers.ServerError(w, err)
 	}
 
 	m.App.Session.Put(r.Context(), "reservation", reservation)
@@ -113,7 +148,7 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
 //Availability is the Search-Availability page handler GET "search-availability"
 func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "search-availability.page.html", &models.TemplateData{})
+	render.Template(w, r, "search-availability.page.html", &models.TemplateData{})
 }
 
 //PostAvailability is the PostAvailability page handler POST "search-availability"
@@ -148,7 +183,7 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 
 //Contact is the Contact page handler
 func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "contact.page.html", &models.TemplateData{})
+	render.Template(w, r, "contact.page.html", &models.TemplateData{})
 }
 
 //Gets data from "/make-reservation" and then shows them here! GET "/reservation-summary"
@@ -166,7 +201,7 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 	data := make(map[string]interface{})
 	data["reservation"] = reservation
 
-	render.RenderTemplate(w, r, "reservation-summary.page.html", &models.TemplateData{
+	render.Template(w, r, "reservation-summary.page.html", &models.TemplateData{
 		Data: data,
 	})
 }
