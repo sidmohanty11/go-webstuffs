@@ -32,6 +32,74 @@
 {{end}}
 
 {{define "js"}}
-<script src="/static/js/presidentals.js">
+<script>
+    //executes when the button is clicked! in Generals
+
+    document.getElementById("checkAvailabilitybutton").addEventListener("click", function () {
+        const html = `
+<form action="" method="POST" novalidate id="check-availability-form">
+    <div class="row">
+        <div class="row mb-3" id="reservation-date-modal">
+            <div class="col-6">
+                <label for="start_date" class="form-label">Starting Date</label>
+                <input disabled placeholder="yyyy-mm-dd" type="text" class="form-control" id="start_date" name="start"
+                    aria-describedby="startEmailHelp" required>
+                <div id="emailHelp" class="form-text">Enter your starting date for stay.</div>
+            </div>
+            <div class="col-6">
+                <label for="end_date" class="form-label">Ending Date</label>
+                <input disabled placeholder="yyyy-mm-dd" type="text" class="form-control" id="end_date" name="end"
+                    aria-describedby="endEmailHelp" required>
+                <div id="emailHelp" class="form-text">Enter your ending date of stay.</div>
+            </div>
+        </div>
+    </div>
+    <hr />
+</form>
+`;
+
+        attention.custom({
+            text: html,
+            title: "Choose your dates.",
+            willOpen: () => {
+                const elem = document.getElementById('reservation-date-modal');
+                const rp = new DateRangePicker(elem, {
+                    format: 'yyyy-mm-dd',
+                    showOnFocus: true,
+                    minDate: new Date(),
+                })
+            },
+
+            didOpen: () => {
+                document.getElementById('start_date').removeAttribute('disabled');
+                document.getElementById('end_date').removeAttribute('disabled');
+            },
+
+            callback: function (result) {
+                const form = document.getElementById("check-availability-form");
+                const formData = new FormData(form);
+                formData.append("csrf_token", "{{.CSRFToken}}");
+                formData.append("room_id", "2");
+
+                fetch("/search-availability-json", {
+                    method: "POST",
+                    body: formData,
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.ok) {
+                            attention.custom({
+                                icon: "success",
+                                text: `<p>Room is Available!!</p>` +
+                                    `<p><a href="/book-room?id=${data.room_id}&s=${data.start_date}&e=${data.end_date}" class="btn btn-success">Book Now!</a></p>`,
+                                showConfirmButton: false,
+                            })
+                        } else {
+                            attention.error({ title: "No availability" })
+                        }
+                    })
+            }
+        });
+    })
 </script>
 {{end}}
