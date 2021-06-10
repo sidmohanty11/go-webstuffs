@@ -75,15 +75,8 @@
     <script src="https://unpkg.com/notie"></script>
     <!-- sweetalert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-    const elem = document.getElementById('reservation-date');
-        const rangepicker = new DateRangePicker(elem, {
-            format: 'yyyy-mm-dd',
-            minDate: new Date(),
-        });
-</script>
     <script src="/static/js/basescript.js"></script>
-    
+
     {{with .Error}}
     <script> notify("{{.}}", "error")</script>
     {{end}}

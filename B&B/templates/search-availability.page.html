@@ -30,3 +30,13 @@
 </div>
 
 {{end}}
+
+{{define "js"}}
+    <script>
+        const elem = document.getElementById('reservation-date');
+        const rangepicker = new DateRangePicker(elem, {
+            format: 'yyyy-mm-dd',
+            minDate: new Date(),
+        });
+    </script>
+{{end}}
