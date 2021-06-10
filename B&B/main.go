@@ -33,20 +33,12 @@ func main() {
 	gob.Register(models.Room{})
 	gob.Register(models.Restriction{})
 
-	mailChan := make(chan models.MailData)
-	defer close(mailChan) //put in app.MailChan when testing so main can execute fully
+	app.MailChan = make(chan models.MailData)
+	defer close(app.MailChan) //put in app.MailChan when testing so main can execute fully
 	listenForMail()
 
 	// format of email
 	fmt.Println("Starting mail listener!")
-	// msg := models.MailData{
-	// 	To:      "sidmohanty11@gmail.com",
-	// 	From:    "chrisbrown@heropanti.com",
-	// 	Subject: "hi bro",
-	// 	Content: "",
-	// }
-
-	// app.MailChan <- msg
 
 	//url -> uniform resource locator!
 	//true when in prod
