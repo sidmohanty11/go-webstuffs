@@ -16,12 +16,16 @@
                         <td><strong>{{$res.FirstName}} {{$res.LastName}}</strong></td>
                     </tr>
                     <tr>
+                        <td>Room Name:</td>
+                        <td><strong>{{$res.Room.RoomName}}</strong></td>
+                    </tr>
+                    <tr>
                         <td>Arrival:</td>
-                        <td><strong></strong></td>
+                        <td><strong>{{index .StringMap "start_date"}}</strong></td>
                     </tr>
                     <tr>
                         <td>Departure:</td>
-                        <td><strong></strong></td>
+                        <td><strong>{{index .StringMap "end_date"}}</strong></td>
                     </tr>
                     <tr>
                         <td>Email:</td>

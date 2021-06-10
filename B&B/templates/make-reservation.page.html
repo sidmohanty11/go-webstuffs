@@ -3,6 +3,7 @@
 
 {{define "content"}}
 <div class="container">
+    {{$res := index .Data "reservation"}}
     <div class="row">
         <h1 class="mt-2">Make Reservation</h1>
         <h2>Reservation Details</h2>
@@ -10,16 +11,19 @@
         
         <ul class="list-group">
             <li class="list-group-item d-flex justify-content-between align-items-center">
+                Chosen Room:
+                <span class="badge bg-dark rounded-pill">{{$res.Room.RoomName}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
                 Arrival:
                 <span class="badge bg-dark rounded-pill">{{index .StringMap "start_date"}}</span>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 Departure:
                 <span class="badge bg-dark rounded-pill">{{index .StringMap "end_date"}}</span>
-            </li>
+            </li> 
         </ul>
 
-        {{$res := index .Data "reservation"}}
         <form action="/make-reservation" method="POST" novalidate>
             <input type="hidden" value="{{.CSRFToken}}" name="csrf_token" />
             <input type="hidden" name="start_date" value="{{index .StringMap "start_date"}}" />
@@ -54,7 +58,7 @@
                 <input type="text" value="{{$res.Phone}}" name="phone" class="form-control {{with .Form.Errors.Get "phone"}} is-invalid {{end}}" id="phone" required autocomplete="off">
             </div>
             <hr />
-            <button class="btn btn-primary">Book</button>
+            <button class="btn btn-outline-dark">Book</button>
         </form>
     </div>
 </div>
