@@ -86,8 +86,7 @@
                                 attention.custom({
                                     icon:"success",
                                     text:`<p>Room is Available!!</p>`+
-                                    `<p><a href="" class="btn btn-success">`+
-                                        `Book Now!</a></p>`,
+                                    `<p><a href="/book-room?id=${data.room_id}&s=${data.start_date}&e=${data.end_date}" class="btn btn-success">Book Now!</a></p>`,
                                         showConfirmButton:false,
                                 })
                             } else {
