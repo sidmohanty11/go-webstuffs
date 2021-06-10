@@ -83,9 +83,15 @@
                         .then(res => res.json())
                         .then(data => {
                             if (data.ok) {
-                                console.log("room available")
+                                attention.custom({
+                                    icon:"success",
+                                    text:`<p>Room is Available!!</p>`+
+                                    `<p><a href="" class="btn btn-success">`+
+                                        `Book Now!</a></p>`,
+                                        showConfirmButton:false,
+                                })
                             } else {
-                                console.log("room not available")
+                                attention.error({title:"No availability"})
                             }
                         })
                 }

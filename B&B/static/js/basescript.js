@@ -41,13 +41,15 @@ function Prompt() {
         })
     }
     const custom = async (c) => {
-        const { title = "", text = "" } = c;
+        const { title = "", text = "", icon="", showConfirmButton=true } = c;
         const { value: formValues } = await Swal.fire({
             title: title,
             html: text,
+            icon:icon,
             backdrop: false,
             focusConfirm: false,
             showCancelButton: true,
+            showConfirmButton:showConfirmButton,
             willOpen: () => {
                 if (c.willOpen !== undefined) {
                     c.willOpen();
