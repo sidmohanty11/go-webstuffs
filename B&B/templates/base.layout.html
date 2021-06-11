@@ -58,6 +58,7 @@
                         </li>
                     </ul>
                     {{if eq .IsAuthenticated 1}}
+                    <a href="/admin/dashboard" class="btn btn-outline-light mx-2">Admin</a>
                     <a href="/logout" class="btn btn-outline-light mx-2">Log out</a>
                     {{else}}
                     <a href="/login" class="btn btn-outline-light mx-2">Log in</a>
