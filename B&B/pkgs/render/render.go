@@ -2,13 +2,14 @@ package render
 
 import (
 	"bytes"
-	"github.com/justinas/nosurf"
-	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/config"
-	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/models"
 	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
+
+	"github.com/justinas/nosurf"
+	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/config"
+	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/models"
 )
 
 var functions = template.FuncMap{}
@@ -25,6 +26,9 @@ func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateDa
 	td.Warning = app.Session.PopString(r.Context(), "warning")
 	td.Error = app.Session.PopString(r.Context(), "error")
 	td.CSRFToken = nosurf.Token(r)
+	if app.Session.Exists(r.Context(), "user_id") {
+		td.IsAuthenticated = 1
+	}
 	return td
 }
 

@@ -1,11 +1,12 @@
 package main
 
 import (
+	"net/http"
+
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/config"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/handlers"
-	"net/http"
 )
 
 func routes(app *config.AppConfig) http.Handler {
@@ -37,7 +38,13 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Get("/signup", handlers.Repo.SignUp)
 	mux.Post("/signup", handlers.Repo.PostSignUp)
 	mux.Get("/login", handlers.Repo.Login)
+	mux.Get("/logout", handlers.Repo.Logout)
 	mux.Post("/login", handlers.Repo.PostLogin)
+
+	mux.Route("/admin", func(mux chi.Router) {
+		mux.Use(Auth)
+		mux.Get("/dashboard", handlers.Repo.AdminDashboard)
+	})
 
 	fileServer := http.FileServer(http.Dir("./static/")) //for serving static files
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
