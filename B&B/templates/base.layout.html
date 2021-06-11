@@ -82,7 +82,10 @@
     {{with .Error}}
     <script> notify("{{.}}", "error")</script>
     {{end}}
-    </script>
+
+    {{with .Flash}}
+    <script> notify("{{.}}", "success")</script>
+    {{end}}
     {{block "js" .}}
     
     {{end}}
