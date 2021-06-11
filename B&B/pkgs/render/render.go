@@ -6,13 +6,21 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+	"time"
 
 	"github.com/justinas/nosurf"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/config"
 	"github.com/sidmohanty11/go-webstuffs/BB/pkgs/models"
 )
 
-var functions = template.FuncMap{}
+var functions = template.FuncMap{
+	"humanDate": HumanDate,
+}
+
+// returns YYYY-MM-DD
+func HumanDate(t time.Time) string {
+	return t.Format("2006-01-02")
+}
 
 var app *config.AppConfig
 
