@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/gob"
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -33,6 +34,22 @@ func main() {
 	gob.Register(models.Room{})
 	gob.Register(models.Restriction{})
 
+	//read flags
+	inProduction := flag.Bool("production", true, "App in production")
+	useCache := flag.Bool("cache", true, "Use template cache")
+	dbHost := flag.String("dbhost", "localhost", "database host")
+	dbName := flag.String("dbname", "", "database name")
+	dbUser := flag.String("dbuser", "", "database user")
+	dbPassword := flag.String("dbpassword", "", "database password")
+	dbPort := flag.String("dbport", "5432", "database port")
+	dbSSL := flag.String("dbssl", "disable", "database ssl settings (disable, prefer,require)")
+
+	flag.Parse()
+
+	if *dbName == "" || *dbUser == "" || *dbPassword == "" {
+		fmt.Println("Missing required flags")
+	}
+
 	app.MailChan = make(chan models.MailData)
 	defer close(app.MailChan) //put in app.MailChan when testing so main can execute fully
 	listenForMail()
@@ -42,7 +59,8 @@ func main() {
 
 	//url -> uniform resource locator!
 	//true when in prod
-	app.InProduction = false
+	app.InProduction = *inProduction
+	app.UseCache = *useCache
 
 	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	app.InfoLog = infoLog
@@ -59,7 +77,8 @@ func main() {
 
 	//connect to DB!
 	log.Println("Connecting to DB at PORT 5432")
-	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=postgres user=postgres password=Sidharth11")
+	connectionString := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s sslmode=%s", *dbHost, *dbPort, *dbName, *dbUser, *dbPassword, *dbSSL)
+	db, err := driver.ConnectSQL(connectionString)
 
 	if err != nil {
 		log.Fatalln("Cannot connect to DB!")
@@ -75,7 +94,6 @@ func main() {
 		return
 	}
 
-	app.UseCache = app.InProduction
 	app.TemplateCache = tc
 
 	repo := handlers.NewRepo(&app, db)
