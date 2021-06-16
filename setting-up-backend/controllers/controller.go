@@ -2,13 +2,18 @@ package controllers
 
 import (
 	"log"
+	"strconv"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 	"github.com/sidmohanty11/go-webstuffs/setting-up-backend/db"
 	"github.com/sidmohanty11/go-webstuffs/setting-up-backend/models"
 )
+
+const SecretKey = "secret"
 
 func Register(c *fiber.Ctx) error {
 	var data map[string]string
@@ -32,7 +37,7 @@ func Register(c *fiber.Ctx) error {
 	return c.JSON(user)
 }
 
-func Login(c *fiber.App) error {
+func Login(c *fiber.Ctx) error {
 	var data map[string]string
 
 	err := c.BodyParser(&data)
@@ -55,12 +60,55 @@ func Login(c *fiber.App) error {
 	err = bcrypt.CompareHashAndPassword(user.Password, []byte(data["password"]))
 
 	if err != nil {
-		log.Fatalln(err.Error())
 		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{
 			"message": "incorrect password",
 		})
 	}
 
-	return c.JSON(user)
+	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
+		Issuer:    strconv.Itoa(int(user.ID)),
+		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+	})
+
+	token, err := claims.SignedString([]byte(SecretKey))
+
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		return c.JSON(fiber.Map{
+			"message": "internal sever error",
+		})
+	}
+
+	cookie := fiber.Cookie{
+		Name:     "jwt",
+		Value:    token,
+		Expires:  time.Now().Add(time.Hour * 24),
+		HTTPOnly: true,
+	}
+
+	c.Cookie(&cookie)
+
+	return c.JSON(fiber.Map{
+		"message": "success",
+	})
+}
+
+func User(c *fiber.Ctx) error {
+	cookie := c.Cookies("jwt")
+
+	token, err := jwt.ParseWithClaims(cookie, jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(SecretKey), nil
+	})
+
+	if err != nil {
+		c.Status(fiber.StatusUnauthorized)
+		return c.JSON(fiber.Map{
+			"message": "unauthenticated",
+		})
+	}
+
+	claims := token.Claims
+
+	return c.JSON(claims)
 }
